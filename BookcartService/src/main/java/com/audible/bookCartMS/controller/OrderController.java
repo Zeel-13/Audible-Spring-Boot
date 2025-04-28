@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.audible.bookCartMS.dto.AudioBookDTO;
 import com.audible.bookCartMS.dto.PaymentRequest;
+import com.audible.bookCartMS.feign.AudiobookClient;
 import com.audible.bookCartMS.feign.PaymentClient;
 import com.audible.bookCartMS.model.BookCart;
 import com.audible.bookCartMS.model.Order;
@@ -32,6 +34,9 @@ public class OrderController {
 
 	@Autowired
 	private PaymentClient paymentClient;
+	
+	@Autowired
+	private AudiobookClient audiobookClient;
 
 	@PostMapping("/place/{userId}/{mode}")
 	public ResponseEntity<String> placeOrder(@PathVariable int userId,@PathVariable String mode) {
@@ -39,8 +44,18 @@ public class OrderController {
 		if (cart == null || cart.getAudiobookIds().isEmpty()) {
 			return ResponseEntity.badRequest().body("Cart is empty or doesn't exist for user ID: " + userId);
 		}
-
-		double totalAmount = cart.getAudiobookIds().size() * 10.0;
+		
+		ResponseEntity<List<AudioBookDTO>> responseEntity=audiobookClient.getAudiobooksByIds(cart.getAudiobookIds());
+		List<AudioBookDTO> audioBookList = responseEntity.getBody();
+		double totalAmount = 0;
+		if (audioBookList != null) {
+		    for (AudioBookDTO audioBook : audioBookList) {
+		        totalAmount=totalAmount+audioBook.getPrice();
+		    }
+		} else {
+		    System.out.println("Response body is null");
+		}
+		
 
 		Order order = new Order(UUID.randomUUID().toString(), userId, cart.getAudiobookIds(), totalAmount);
 
