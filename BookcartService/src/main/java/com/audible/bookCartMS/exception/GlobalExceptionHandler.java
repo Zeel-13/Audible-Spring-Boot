@@ -1,22 +1,23 @@
-package com.Audible.UserService.exception;
+package com.audible.bookCartMS.exception;
 
 import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-
-import feign.FeignException;
 
 @RestControllerAdvice
-public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
-	
+public class GlobalExceptionHandler {
+
+	private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+
 	@Value("${spring.application.name}")
 	private String serviceName;
 
@@ -34,28 +35,21 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 	@ExceptionHandler(ResourceNotFoundException.class)
 	public ResponseEntity<Object> handleResourceNotFoundException(ResourceNotFoundException ex, WebRequest request) {
 		Map<String, Object> body = createErrorBody(HttpStatus.NOT_FOUND, ex.getMessage(), request);
-		System.out.println("ResourceNotFoundException handled globally in auth service");
+		System.out.println("ResourceNotFoundException handled globally in bookcart service");
 		return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
 	}
-	
 	
 	@ExceptionHandler(IllegalArgumentException.class)
 	public ResponseEntity<Object> handleIllegalArgumentException(IllegalArgumentException ex, WebRequest request) {
 	    Map<String, Object> body = createErrorBody(HttpStatus.BAD_REQUEST, ex.getMessage(), request);
-	    System.out.println("IllegalArgumentException handled globally in auth service");
+	    System.out.println("IllegalArgumentException handled globally in bookcart service");
 	    return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
 	}
 
 	@ExceptionHandler(RuntimeException.class)
 	public ResponseEntity<Object> handleRuntimeException(RuntimeException ex, WebRequest request) {
 	    Map<String, Object> body = createErrorBody(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage(), request);
-	    System.out.println("RuntimeException handled globally in auth service");
+	    System.out.println("RuntimeException handled globally in bookcart service");
 	    return new ResponseEntity<>(body, HttpStatus.INTERNAL_SERVER_ERROR);
-	}
-
-	@ExceptionHandler(FeignException.class)
-	public ResponseEntity<Object> handleFeignException(FeignException ex) {
-		System.out.println("exception handled globally in auth service");
-		return ResponseEntity.status(ex.status()).body(ex.contentUTF8());
 	}
 }
