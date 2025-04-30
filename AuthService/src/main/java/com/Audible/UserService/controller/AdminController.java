@@ -66,7 +66,7 @@ public class AdminController {
     }
 
     // Delete user by ID
-    @DeleteMapping("/user/{customerId}")
+    @DeleteMapping("/user-delete/{customerId}")
     public void deleteUserById(@PathVariable Integer customerId) {
         service.deleteUserById(customerId);
     }

@@ -65,12 +65,12 @@ public class AudiobookController {
 	public ResponseEntity<Audiobook> updateAudioBookPrice(
 	        @PathVariable int bookId, 
 	        @RequestParam Double price) {
-	    try {
+//	    try {
 	        Audiobook updatedBook = service.updateAudioBookPrice(bookId, price);
 	        return ResponseEntity.ok(updatedBook); // Return 200 OK with the updated audiobook
-	    }  catch (Exception ex) {
-	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null); // Handle other exceptions
-	    }
+//	    }  catch (Exception ex) {
+//	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null); // Handle other exceptions
+//	    }
 	}
 
 	

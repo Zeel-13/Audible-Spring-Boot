@@ -3,6 +3,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
+import javax.management.RuntimeErrorException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -39,6 +41,10 @@ public class ServiceImpl implements service{
         if (user == null || user.getPassword() == null) {
             throw new IllegalArgumentException("Invalid user or password");
         }
+        user user2=repo.findByUsername(user.getUsername());
+        if(user2!=null) {
+        	throw new RuntimeException("User with username:"+user.getUsername()+" already exists.");
+        }
         try {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             return repo.save(user);
@@ -72,10 +78,11 @@ public class ServiceImpl implements service{
                 String role = authorities.iterator().next().getAuthority();
                 return jwtService.generateToken(ud.getUsername(), role.substring(5));
             }
-            throw new BadCredentialsException("Authentication failed");
-        } catch (BadCredentialsException e) {
-            throw new RuntimeException("Invalid credentials", e);
-        } catch (Exception e) {
+            throw new BadCredentialsException("Authentication failed ! Invalid Credentials");
+        } 
+        catch (BadCredentialsException e) {
+            throw new BadCredentialsException("Authentication failed ! Invalid Credentials", e);
+        }catch (Exception e) {
             throw new RuntimeException("Authentication error", e);
         }
     }
