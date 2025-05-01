@@ -19,41 +19,36 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "audiobook")
 public class Audiobook {
-		@Id
-	    @GeneratedValue(strategy = GenerationType.IDENTITY)
-	    private int bookId;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int bookId;
 
-	    @NotBlank(message = "Title is mandatory")
-	    private String title;
+	@NotBlank(message = "Title is mandatory")
+	private String title;
 
-	    @NotBlank(message = "Author is mandatory")
-	    private String author;
+	@NotBlank(message = "Author is mandatory")
+	private String author;
 
-	    @NotBlank(message = "Narrator is mandatory")
-	    private String narrator;
+	@NotBlank(message = "Narrator is mandatory")
+	private String narrator;
 
-	    @Min(value = 1, message = "Time must be at least 1 minute")
-	    private int time;
+	@Min(value = 1, message = "Time must be at least 1 minute")
+	private int time;
 
-	    @NotBlank(message = "Release date is required")
-	    private String release_date;
+	@NotBlank(message = "Release date is required")
+	private String release_date;
 
-	    @NotBlank(message = "Language is required")
-	    private String language;
+	@NotBlank(message = "Language is required")
+	private String language;
 
-	    @DecimalMin(value = "0.0", message = "Stars cannot be negative")
-	    @DecimalMax(value = "5.0", message = "Stars cannot exceed 5.0")
-	    private double stars;
+	@DecimalMin(value = "0.0", message = "Stars cannot be negative")
+	@DecimalMax(value = "5.0", message = "Stars cannot exceed 5.0")
+	private double stars;
 
-	    @DecimalMin(value = "0.0", message = "Price must be positive")
-	    private double price;
+	@DecimalMin(value = "0.0", message = "Price must be positive")
+	private double price;
 
-	    @Min(value = 0, message = "Ratings cannot be negative")
-	    private int ratings;
+	@Min(value = 0, message = "Ratings cannot be negative")
+	private int ratings;
 
-	}
-
-
-
-    
-    
+}
